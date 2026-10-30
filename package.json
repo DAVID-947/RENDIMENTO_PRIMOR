@@ -1,0 +1,19 @@
+{
+  "name": "investsmart",
+  "version": "1.0.0",
+  "description": "InvestSmart — Plataforma académica de simulação, análise e comparação de investimentos financeiros.",
+  "private": true,
+  "scripts": {
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "build:shared": "cd packages/shared && npm run build",
+    "build:server": "cd server && npm run build",
+    "build:client": "cd client && npm run build",
+    "prisma:generate": "cd server && npx prisma generate",
+    "prisma:migrate": "cd server && npx prisma migrate dev",
+    "prisma:seed": "cd server && npx prisma db seed",
+    "setup": "npm run build:shared && npm run prisma:generate && npm run prisma:migrate && npm run prisma:seed"
+  },
+  "keywords": ["investsmart", "simulador", "investimentos", "académico"],
+  "license": "MIT"
+}

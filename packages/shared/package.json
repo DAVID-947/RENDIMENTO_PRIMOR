@@ -1,0 +1,12 @@
+{
+  "name": "@investsmart/shared",
+  "version": "1.0.0",
+  "description": "Tipos, enums e DTOs partilhados entre o cliente e o servidor do InvestSmart.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "license": "MIT"
+}
