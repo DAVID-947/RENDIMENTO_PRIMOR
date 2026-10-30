@@ -1,6 +1,6 @@
 /**
  * Estilos globais da aplicação InvestSmart.
- * Inclui reset CSS, variáveis de cor e classes utilitárias.
+ * Tokens de design, reset CSS, botões e utilitários transversais.
  */
 
 /* ============================================================
@@ -15,23 +15,50 @@
 }
 
 /* ============================================================
-   Variáveis de Cor — Paleta InvestSmart
+   Tokens de Design
    ============================================================ */
 :root {
-  --primary: #1a73e8;
-  --primary-dark: #1557b0;
-  --success: #0f9d58;
-  --warning: #f4b400;
-  --danger: #db4437;
-  --bg: #f8f9fa;
+  /* Cores de marca */
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-soft: #e8f0ff;
+
+  /* Cores semânticas
+     Os tons fortes garantem contraste AA (>= 4.5:1) sobre as superfícies suaves. */
+  --success: #047857;
+  --success-soft: #e7f8f1;
+  --warning: #b45309;
+  --warning-soft: #fff7e6;
+  --danger: #b91c1c;
+  --danger-soft: #fdecec;
+
+  /* Superfícies e texto */
+  --bg: #f4f6fb;
   --card-bg: #ffffff;
-  --text: #202124;
-  --text-secondary: #5f6368;
-  --border: #dadce0;
-  --radius: 8px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  /* Sidebar */
+  --sidebar-width: 268px;
+  --sidebar-bg: #0b1220;
+  --sidebar-surface: #121c30;
+  --sidebar-text: #94a3b8;
+  --sidebar-border: rgba(148, 163, 184, 0.14);
+
+  /* Forma e elevação */
+  --radius: 14px;
+  --radius-sm: 9px;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 24px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.12);
   --transition: 0.2s ease;
+
+  /* Tipografia */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
 }
 
 /* ============================================================
@@ -44,9 +71,14 @@ html {
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-sans);
   background-color: var(--bg);
+  background-image: radial-gradient(
+    circle at 100% 0,
+    rgba(37, 99, 235, 0.06),
+    transparent 42%
+  );
+  background-attachment: fixed;
   color: var(--text);
   line-height: 1.6;
   min-height: 100vh;
@@ -77,6 +109,78 @@ select,
 textarea {
   font-family: inherit;
   font-size: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: rgba(37, 99, 235, 0.18);
+}
+
+/* Scrollbar discreta (WebKit) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  background-clip: content-box;
+  border: 2px solid transparent;
+}
+
+/* ============================================================
+   Botões
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.62rem 1.05rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background-color var(--transition), border-color var(--transition),
+    color var(--transition), transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.btn--primary {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.22);
+}
+
+.btn--primary:hover {
+  background: var(--primary-dark);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn--ghost {
+  background: #ffffff;
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.btn--ghost:hover {
+  background: #f8fafc;
+  border-color: var(--border-strong);
+  color: var(--text);
 }
 
 /* ============================================================
@@ -186,6 +290,21 @@ textarea {
 }
 
 /* ============================================================
+   Utilitários — Acessibilidade
+   ============================================================ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
    Utilitários — Margens e Espaçamento
    ============================================================ */
 .mt-1 { margin-top: 0.5rem; }
@@ -228,5 +347,15 @@ textarea {
 @media (max-width: 480px) {
   html {
     font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

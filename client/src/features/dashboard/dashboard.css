@@ -1,0 +1,508 @@
+/**
+ * Estilos do Dashboard e dos seus componentes internos.
+ */
+
+/* ============================================================
+   Estrutura
+   ============================================================ */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dashboard__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dashboard__eyebrow {
+  margin-bottom: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.dashboard__title {
+  font-size: clamp(1.6rem, 2.2vw, 2rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.dashboard__subtitle {
+  max-width: 62ch;
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.dashboard__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dashboard__updated {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.dashboard__kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.dashboard__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(320px, 0.9fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+/* ============================================================
+   Painéis genéricos
+   ============================================================ */
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+}
+
+.panel--chart {
+  min-width: 0;
+}
+
+.panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.panel__title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.panel__subtitle {
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.panel__count {
+  padding: 0.28rem 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  background: #f1f5f9;
+  border-radius: 999px;
+}
+
+.panel__trend {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--success);
+  background: var(--success-soft);
+  border-radius: 999px;
+}
+
+.panel__trend small {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.panel__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.panel > .panel__link {
+  margin-top: auto;
+  padding-top: 1.15rem;
+}
+
+.panel__link:hover {
+  color: var(--primary-dark);
+}
+
+.panel__empty {
+  padding: 1rem 0;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   Gráfico de evolução
+   ============================================================ */
+.evolution__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.evolution__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.evolution__swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+}
+
+.evolution__swatch--invested {
+  background: #94a3b8;
+}
+
+.evolution__swatch--projected {
+  background: #2563eb;
+}
+
+.evolution__chart {
+  width: 100%;
+  min-width: 0;
+  margin-top: auto;
+}
+
+/* ============================================================
+   Resumo por categoria
+   ============================================================ */
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+}
+
+.category-list__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
+}
+
+.category-list__name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.category-list__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.category-list__value {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.category-list__value strong {
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+.category-list__track {
+  height: 7px;
+  overflow: hidden;
+  background: #eef2f7;
+  border-radius: 999px;
+}
+
+.category-list__bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.5s ease;
+}
+
+/* ============================================================
+   Tabela de investimentos recentes
+   ============================================================ */
+.recent-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.recent-table {
+  width: 100%;
+  font-size: 0.82rem;
+  border-collapse: collapse;
+}
+
+.recent-table th {
+  padding: 0 0.75rem 0.7rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.recent-table td {
+  padding: 0.85rem 0.75rem;
+  vertical-align: middle;
+  color: var(--text-secondary);
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.recent-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.recent-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.recent-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.recent-table__title {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.recent-table__title:hover {
+  color: var(--primary);
+}
+
+.recent-table__estimated {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.recent-table__date {
+  white-space: nowrap;
+}
+
+.category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.22rem 0.55rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--text);
+  border-radius: 999px;
+}
+
+.category-pill__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.return-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.22rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border-radius: 6px;
+}
+
+.return-pill--positive {
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+.return-pill--negative {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+/* ============================================================
+   Skeleton de carregamento
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(90deg, #eef2f7 25%, #f8fafc 37%, #eef2f7 63%);
+  background-size: 400% 100%;
+  border-radius: 12px;
+  animation: dashboard-shimmer 1.4s ease infinite;
+}
+
+@keyframes dashboard-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.dashboard-skeleton__banner {
+  height: 74px;
+}
+
+.dashboard-skeleton__heading {
+  width: min(420px, 70%);
+  height: 56px;
+}
+
+.dashboard-skeleton__kpi {
+  height: 152px;
+  border-radius: var(--radius);
+}
+
+.dashboard-skeleton__chart {
+  height: 420px;
+  border-radius: var(--radius);
+}
+
+.dashboard-skeleton__side {
+  height: 420px;
+  border-radius: var(--radius);
+}
+
+.dashboard-skeleton__table {
+  height: 280px;
+  border-radius: var(--radius);
+}
+
+/* ============================================================
+   Responsividade
+   ============================================================ */
+@media (max-width: 1180px) {
+  .dashboard__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .dashboard__kpis {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard__header {
+    align-items: flex-start;
+  }
+
+  .dashboard__actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Tabela transformada em cartões */
+  .recent-table thead {
+    display: none;
+  }
+
+  .recent-table,
+  .recent-table tbody,
+  .recent-table tr,
+  .recent-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .recent-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .recent-table tr {
+    padding: 0.8rem 0.9rem;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .recent-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.3rem 0;
+    border: 0;
+  }
+
+  .recent-table td[data-label]::before {
+    content: attr(data-label);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .recent-table td:first-child {
+    margin-bottom: 0.25rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .recent-table td:first-child::before {
+    display: none;
+  }
+
+  .recent-table tbody tr:hover {
+    background: #ffffff;
+  }
+
+  .dashboard-skeleton__chart,
+  .dashboard-skeleton__side {
+    height: 280px;
+  }
+}
+
+@media (max-width: 520px) {
+  .dashboard__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .dashboard__actions .btn {
+    width: 100%;
+  }
+
+  .panel__header {
+    flex-wrap: wrap;
+  }
+}

@@ -31,7 +31,7 @@ function AcademicDisclaimer({ compact = false }: AcademicDisclaimerProps) {
     title: {
       fontWeight: 700,
       fontSize: compact ? '0.85rem' : '1rem',
-      color: '#e65100',
+      color: 'var(--warning)',
       marginBottom: compact ? 0 : '0.25rem',
     },
     text: {

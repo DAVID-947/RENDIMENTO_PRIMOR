@@ -1,0 +1,114 @@
+/**
+ * Estilos do cartão de KPI reutilizável.
+ */
+.stat-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.25rem 1.35rem;
+  overflow: hidden;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  right: -30%;
+  bottom: -60%;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, var(--stat-glow), transparent 68%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.stat-card--primary {
+  --stat-accent: #2563eb;
+  --stat-soft: #e8f0ff;
+  --stat-glow: rgba(37, 99, 235, 0.16);
+}
+
+.stat-card--success {
+  --stat-accent: #059669;
+  --stat-soft: #e7f8f1;
+  --stat-glow: rgba(5, 150, 105, 0.16);
+}
+
+.stat-card--warning {
+  --stat-accent: #d97706;
+  --stat-soft: #fff7e6;
+  --stat-glow: rgba(217, 119, 6, 0.16);
+}
+
+.stat-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.stat-card__icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--stat-accent);
+  background: var(--stat-soft);
+  border-radius: 11px;
+}
+
+.stat-card__badge {
+  padding: 0.22rem 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  background: #f1f5f9;
+  border-radius: 999px;
+}
+
+.stat-card__badge--positive {
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+.stat-card__badge--negative {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.stat-card__badge--warning {
+  color: #b45309;
+  background: var(--warning-soft);
+}
+
+.stat-card__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.stat-card__value {
+  font-size: clamp(1.5rem, 2.2vw, 1.9rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.stat-card__hint {
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
