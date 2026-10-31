@@ -33,6 +33,18 @@ enum RiskLevel {
   HIGH
 }
 
+enum InterestType {
+  SIMPLE
+  COMPOUND
+}
+
+enum CompoundingFrequency {
+  MONTHLY
+  QUARTERLY
+  SEMIANNUAL
+  ANNUAL
+}
+
 // ----------------------------------------------------------------------------
 // Modelos
 // ----------------------------------------------------------------------------
@@ -64,6 +76,8 @@ model Simulation {
   duration       Int
   /// Taxa de juro anual em percentagem (ex.: 9.50 para 9,5%).
   interestRate   Decimal  @db.Decimal(6, 2)
+  interestType   InterestType @default(COMPOUND)
+  compoundingFrequency CompoundingFrequency @default(MONTHLY)
   /// Montante final calculado pelo backend.
   finalAmount    Decimal  @db.Decimal(16, 2)
   /// Lucro calculado pelo backend (finalAmount - initialCapital).

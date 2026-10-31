@@ -29,6 +29,9 @@ function serializeSimulation(
     initialCapital: Number(simulation.initialCapital),
     duration: simulation.duration,
     interestRate: Number(simulation.interestRate),
+    interestType: simulation.interestType,
+    compoundingFrequency: simulation.compoundingFrequency,
+    durationUnit: 'months',
     finalAmount: Number(simulation.finalAmount),
     profit: Number(simulation.profit),
     assetId: simulation.assetId,
@@ -108,13 +111,30 @@ export async function createSimulation(
     2,
   );
 
-  const { finalAmount, profit } = calculateSimulation({
-    initialCapital: initialCapital.toNumber(),
-    duration: input.duration,
-    interestRate: interestRate.toNumber(),
-  });
+  const durationMonths = input.durationUnit === 'years' ? input.duration * 12 : input.duration;
+  if (!Number.isInteger(durationMonths) || durationMonths > 1200) {
+    throw new AppError(400, 'INVALID_DURATION', 'A duração máxima é de 1200 meses (100 anos).');
+  }
 
-  if (finalAmount.gt(MAX_DECIMAL_16_2)) {
+  let result: ReturnType<typeof calculateSimulation>;
+  try {
+    result = calculateSimulation({
+    initialCapital: initialCapital.toNumber(),
+    durationMonths,
+    annualRate: interestRate.toNumber(),
+    interestType: input.interestType,
+    compoundingFrequency: input.compoundingFrequency,
+    });
+  } catch (error) {
+    if (error instanceof RangeError) {
+      throw new AppError(400, 'INVALID_SIMULATION', error.message);
+    }
+    throw error;
+  }
+
+  const { finalAmount, profit } = result;
+
+  if (new Prisma.Decimal(finalAmount).abs().gt(MAX_DECIMAL_16_2) || new Prisma.Decimal(profit).abs().gt(MAX_DECIMAL_16_2)) {
     throw new AppError(
       422,
       'AMOUNT_TOO_LARGE',
@@ -126,10 +146,12 @@ export async function createSimulation(
     data: {
       assetId: input.assetId,
       initialCapital,
-      duration: input.duration,
+      duration: durationMonths,
       interestRate,
-      finalAmount,
-      profit,
+      interestType: input.interestType,
+      compoundingFrequency: input.compoundingFrequency,
+      finalAmount: new Prisma.Decimal(finalAmount),
+      profit: new Prisma.Decimal(profit),
     },
     include: { asset: true },
   });

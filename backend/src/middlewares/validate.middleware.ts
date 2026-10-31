@@ -3,13 +3,13 @@
 // ============================================================================
 
 import { RequestHandler } from 'express';
-import { AnyZodObject } from 'zod';
+import { ZodTypeAny } from 'zod';
 
 /**
  * Valida `req.body` contra um schema Zod. Em caso de falha, o ZodError é
  * encaminhado para o middleware global de erros.
  */
-export function validateBody(schema: AnyZodObject): RequestHandler {
+export function validateBody(schema: ZodTypeAny): RequestHandler {
   return (req, _res, next) => {
     const result = schema.safeParse(req.body);
 
@@ -26,7 +26,7 @@ export function validateBody(schema: AnyZodObject): RequestHandler {
 /**
  * Valida `req.params` contra um schema Zod.
  */
-export function validateParams(schema: AnyZodObject): RequestHandler {
+export function validateParams(schema: ZodTypeAny): RequestHandler {
   return (req, _res, next) => {
     const result = schema.safeParse(req.params);
 

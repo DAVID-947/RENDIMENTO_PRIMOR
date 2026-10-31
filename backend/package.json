@@ -8,10 +8,13 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
+    "test": "node --test -r ts-node/register src/services/simulation-calculator.test.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:seed": "prisma db seed",
+    "db:local:start": "node scripts/local-postgres.cjs start",
+    "db:local:stop": "node scripts/local-postgres.cjs stop",
     "db:seed": "ts-node prisma/seed.ts"
   },
   "prisma": {

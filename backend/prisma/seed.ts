@@ -212,7 +212,13 @@ async function main(): Promise<void> {
       );
     }
 
-    const { finalAmount, profit } = calculateSimulation(item);
+    const { finalAmount, profit } = calculateSimulation({
+      initialCapital: item.initialCapital,
+      annualRate: item.interestRate,
+      durationMonths: item.duration,
+      interestType: 'COMPOUND',
+      compoundingFrequency: 'MONTHLY',
+    });
 
     await prisma.simulation.upsert({
       where: { id: item.id },

@@ -2,7 +2,7 @@
 // Tipos de resposta — Simulation
 // ============================================================================
 
-import { AssetCategory, RiskLevel } from '@prisma/client';
+import { AssetCategory, CompoundingFrequency, InterestType, RiskLevel } from '@prisma/client';
 
 /** Dados mínimos do ativo incluídos numa simulação. */
 export interface SimulationAssetSummary {
@@ -19,6 +19,9 @@ export interface SimulationResponse {
   initialCapital: number;
   duration: number;
   interestRate: number;
+  interestType: InterestType;
+  compoundingFrequency: CompoundingFrequency;
+  durationUnit: 'months' | 'years';
   finalAmount: number;
   profit: number;
   assetId: string;
@@ -32,4 +35,7 @@ export interface CreateSimulationInput {
   initialCapital: number;
   duration: number;
   interestRate: number;
+  interestType: InterestType;
+  compoundingFrequency: CompoundingFrequency;
+  durationUnit: 'months' | 'years';
 }

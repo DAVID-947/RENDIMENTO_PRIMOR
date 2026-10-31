@@ -25,18 +25,26 @@ export const createSimulationSchema = z
         required_error: 'O campo duration é obrigatório.',
         invalid_type_error: 'O campo duration deve ser numérico.',
       })
-      .int('A duração deve ser um número inteiro de meses.')
+      .int('A duração deve ser um número inteiro.')
       .positive('A duração deve ser superior a zero.')
-      .max(1200, 'A duração não pode exceder 1200 meses (100 anos).'),
+      .max(1200, 'A duração não pode exceder 1200 meses ou 100 anos.'),
     interestRate: z.coerce
       .number({
         required_error: 'O campo interestRate é obrigatório.',
         invalid_type_error: 'O campo interestRate deve ser numérico.',
       })
-      .min(0, 'A taxa de juro não pode ser negativa.')
-      .max(100, 'A taxa de juro não pode exceder 100%.'),
+      .min(-9999.99, 'A taxa não pode ser inferior a -9999,99%.')
+      .max(9999.99, 'A taxa não pode exceder 9999,99%.'),
+    interestType: z.enum(['SIMPLE', 'COMPOUND']).default('COMPOUND'),
+    compoundingFrequency: z.enum(['MONTHLY', 'QUARTERLY', 'SEMIANNUAL', 'ANNUAL']).default('MONTHLY'),
+    durationUnit: z.enum(['months', 'years']).default('months'),
   })
-  .strict();
+  .strict()
+  .superRefine((value, context) => {
+    if (value.durationUnit === 'years' && value.duration > 100) {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ['duration'], message: 'A duração não pode exceder 100 anos.' });
+    }
+  });
 
 /** Valida parâmetros de rota que contenham um id UUID. */
 export const idParamSchema = z.object({

@@ -1,446 +1,80 @@
-# API do InvestSmart
+# API InvestSmart
 
-Documentação dos endpoints do backend. Todos os dados são fictícios e
-destinam-se exclusivamente a fins académicos.
+Base URL local: `http://localhost:3001/api`. As respostas de sucesso usam `{ "success": true, "data": ... }`; os erros incluem `success: false`, `error`, `code`, `statusCode` e, quando aplicável, `details`.
 
-## Base URL
+## Ativos
 
-```text
-http://localhost:3001/api
-```
+### `GET /api/assets`
 
-A API não usa autenticação. O âmbito do projeto é a simulação e consulta de
-investimentos, não a gestão de utilizadores.
+Lista os ativos por ordem alfabética.
 
-## Formato das respostas
+### `GET /api/assets/:id`
 
-Todas as respostas de sucesso seguem este envelope:
+Devolve um ativo pelo UUID. Responde `400` para UUID inválido e `404` quando não existe.
 
-```json
-{
-  "success": true,
-  "data": {}
-}
-```
+Cada ativo contém `id`, `name`, `category`, `description`, `estimatedAnnualRate`, `riskLevel`, `currency` e `createdAt`.
 
-As operações de escrita podem incluir uma mensagem:
+## Simulações
 
-```json
-{
-  "success": true,
-  "data": {},
-  "message": "Simulação criada com sucesso."
-}
-```
+### `GET /api/simulations`
 
-Os erros seguem este formato:
+Lista o histórico, do mais recente para o mais antigo.
+
+### `GET /api/simulations/:id`
+
+Devolve uma simulação pelo UUID. Responde `400` para UUID inválido e `404` quando não existe.
+
+### `POST /api/simulations`
+
+Valida os parâmetros, calcula o resultado no servidor e guarda a simulação. Exemplo:
 
 ```json
 {
-  "success": false,
-  "error": "Dados inválidos.",
-  "code": "VALIDATION_ERROR",
-  "statusCode": 400,
-  "details": [
-    {
-      "field": "initialCapital",
-      "message": "O capital inicial deve ser superior a zero."
-    }
-  ]
-}
-```
-
-## Modelo de dados
-
-### Asset
-
-| Campo | Tipo | Descrição |
-| --- | --- | --- |
-| `id` | UUID | Identificador único |
-| `name` | string | Nome do ativo |
-| `category` | enum | `STOCKS`, `BONDS`, `MUTUAL_FUNDS`, `REAL_ESTATE`, `CRYPTO`, `FIXED_INCOME` |
-| `description` | string | Descrição do ativo |
-| `estimatedAnnualRate` | number | Taxa anual estimada, em percentagem |
-| `riskLevel` | enum | `LOW`, `MEDIUM`, `HIGH` |
-| `currency` | string | Código ISO 4217 (ex.: `AOA`) |
-| `createdAt` | string | Data de criação em ISO 8601 |
-
-### Simulation
-
-| Campo | Tipo | Descrição |
-| --- | --- | --- |
-| `id` | UUID | Identificador único |
-| `initialCapital` | number | Capital inicial |
-| `duration` | integer | Duração em **meses** |
-| `interestRate` | number | Taxa anual em percentagem |
-| `finalAmount` | number | Montante final calculado pelo backend |
-| `profit` | number | Lucro calculado pelo backend |
-| `assetId` | UUID | Ativo associado |
-| `createdAt` | string | Data de criação em ISO 8601 |
-| `asset` | object | Resumo do ativo associado |
-
-O `asset` incluído numa simulação tem os campos `id`, `name`, `category`,
-`riskLevel` e `currency`.
-
-## Endpoints
-
-### GET /api/health
-
-Verifica se a API está a responder.
-
-```bash
-curl http://localhost:3001/api/health
-```
-
-Resposta `200`:
-
-```json
-{
-  "success": true,
-  "data": {
-    "status": "ok",
-    "service": "InvestSmart API",
-    "timestamp": "2026-10-31T10:00:00.000Z"
-  }
-}
-```
-
-### GET /api/assets
-
-Lista todos os ativos por ordem alfabética.
-
-```bash
-curl http://localhost:3001/api/assets
-```
-
-Resposta `200`:
-
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": "0f2e7e2a-5b0e-4e1b-9b8a-3c1f2d4e5f60",
-      "name": "BancoPrime",
-      "category": "STOCKS",
-      "description": "Instituição bancária fictícia com foco em serviços digitais.",
-      "estimatedAnnualRate": 9.5,
-      "riskLevel": "MEDIUM",
-      "currency": "AOA",
-      "createdAt": "2026-10-31T10:00:00.000Z"
-    }
-  ]
-}
-```
-
-### GET /api/assets/:id
-
-Obtém um ativo pelo identificador.
-
-```bash
-curl http://localhost:3001/api/assets/0f2e7e2a-5b0e-4e1b-9b8a-3c1f2d4e5f60
-```
-
-Respostas:
-
-- `200` — ativo encontrado;
-- `400` — `id` não é um UUID válido;
-- `404` — ativo não encontrado.
-
-### GET /api/simulations
-
-Lista o histórico de simulações, da mais recente para a mais antiga.
-
-```bash
-curl http://localhost:3001/api/simulations
-```
-
-Resposta `200`:
-
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": "11111111-1111-4111-8111-111111111111",
-      "initialCapital": 150000,
-      "duration": 12,
-      "interestRate": 9.5,
-      "finalAmount": 164887.14,
-      "profit": 14887.14,
-      "assetId": "0f2e7e2a-5b0e-4e1b-9b8a-3c1f2d4e5f60",
-      "createdAt": "2026-10-31T10:00:00.000Z",
-      "asset": {
-        "id": "0f2e7e2a-5b0e-4e1b-9b8a-3c1f2d4e5f60",
-        "name": "BancoPrime",
-        "category": "STOCKS",
-        "riskLevel": "MEDIUM",
-        "currency": "AOA"
-      }
-    }
-  ]
-}
-```
-
-### GET /api/simulations/:id
-
-Obtém uma simulação pelo identificador.
-
-```bash
-curl http://localhost:3001/api/simulations/11111111-1111-4111-8111-111111111111
-```
-
-Respostas:
-
-- `200` — simulação encontrada;
-- `400` — `id` não é um UUID válido;
-- `404` — simulação não encontrada.
-
-### POST /api/simulations
-
-Cria e guarda uma simulação. O `finalAmount` e o `profit` são calculados pelo
-backend; não devem ser enviados pelo cliente.
-
-Corpo do pedido:
-
-```json
-{
-  "assetId": "0f2e7e2a-5b0e-4e1b-9b8a-3c1f2d4e5f60",
+  "assetId": "UUID de um ativo existente",
   "initialCapital": 150000,
-  "duration": 12,
-  "interestRate": 9.5
+  "interestRate": 9.5,
+  "duration": 2,
+  "durationUnit": "years",
+  "interestType": "COMPOUND",
+  "compoundingFrequency": "MONTHLY"
 }
 ```
 
-Validações:
+`durationUnit` aceita `months` ou `years`; o valor persistido é normalizado para meses. `interestType` aceita `SIMPLE` ou `COMPOUND`. `compoundingFrequency` aceita `MONTHLY`, `QUARTERLY`, `SEMIANNUAL` ou `ANNUAL` e, se omitido, assume `MONTHLY`. A taxa é anual, em percentagem, e pode ser negativa. O cliente não envia `finalAmount` nem `profit`.
 
-| Campo | Regra |
-| --- | --- |
-| `assetId` | UUID válido e existente |
-| `initialCapital` | número > 0 e ≤ 1 000 000 000 |
-| `duration` | inteiro > 0 e ≤ 1200 (meses) |
-| `interestRate` | número entre 0 e 100 |
+A resposta inclui os parâmetros usados, `finalAmount`, `profit`, `assetId`, `createdAt` e um resumo de `asset`. A duração devolvida está em meses. O valor final e o lucro/prejuízo são arredondados a duas casas decimais.
 
-```bash
-curl -X POST http://localhost:3001/api/simulations \
-  -H "Content-Type: application/json" \
-  -d '{
-    "assetId": "0f2e7e2a-5b0e-4e1b-9b8a-3c1f2d4e5f60",
-    "initialCapital": 150000,
-    "duration": 12,
-    "interestRate": 9.5
-  }'
+Validações: `assetId` deve ser UUID existente; `initialCapital` deve ser positivo e até mil milhões; duração deve ser inteira e positiva, até 1200 meses ou 100 anos; a taxa tem de caber em `DECIMAL(6,2)`. O motor rejeita resultados não finitos, taxas compostas com base inválida e perdas superiores ao capital.
+
+### `DELETE /api/simulations/:id`
+
+Elimina uma simulação pelo UUID. Responde `400` para UUID inválido e `404` quando não existe.
+
+## Cálculo
+
+A taxa fornecida é nominal anual. Para juros simples, `VF = C × (1 + taxaAnual × anos)`. Para juros compostos, a taxa anual é dividida pelo número de períodos de capitalização no ano e o prazo é convertido para esses períodos: `VF = C × (1 + taxaDoPeríodo)^n`. Não são incluídos impostos nem comissões.
+
+## Saúde
+
+### `GET /api/health`
+
+Confirma que o servidor responde e que o PostgreSQL aceita uma consulta. Devolve `database: "connected"`; falha de ligação resulta em `503`.
+
+## Base de dados local
+
+Na raiz do repositório, `npm run setup` gera o Prisma Client, aplica migrations e executa o seed. `npm run dev:backend` inicia o cluster local do projeto se estiver configurado e depois arranca a API.
+
+Para um novo ambiente com Docker Compose:
+
+```powershell
+docker compose up -d database
+Copy-Item .env.example .env
+Copy-Item backend/.env.example backend/.env
+npm run setup
 ```
 
-Resposta `201`:
+Antes de executar, substitui `CHANGE_ME` nos dois ficheiros pelo mesmo valor. `.env` configura o Compose e `backend/.env` configura a API; ambos estão ignorados pelo Git.
 
-```json
-{
-  "success": true,
-  "data": {
-    "id": "11111111-1111-4111-8111-111111111111",
-    "initialCapital": 150000,
-    "duration": 12,
-    "interestRate": 9.5,
-    "finalAmount": 164887.14,
-    "profit": 14887.14,
-    "assetId": "0f2e7e2a-5b0e-4e1b-9b8a-3c1f2d4e5f60",
-    "createdAt": "2026-10-31T10:00:00.000Z",
-    "asset": {
-      "id": "0f2e7e2a-5b0e-4e1b-9b8a-3c1f2d4e5f60",
-      "name": "BancoPrime",
-      "category": "STOCKS",
-      "riskLevel": "MEDIUM",
-      "currency": "AOA"
-    }
-  },
-  "message": "Simulação criada com sucesso."
-}
-```
+Para um PostgreSQL já instalado, define `DATABASE_URL` em `backend/.env`. As credenciais nunca devem ser guardadas no código nem commitadas. A migration inicial cria as tabelas `assets` e `simulations`; a migration seguinte acrescenta tipo e frequência de juros e permite taxas negativas e prejuízos.
 
-Erros possíveis:
-
-- `400` — dados inválidos;
-- `404` — ativo não encontrado.
-
-### DELETE /api/simulations/:id
-
-Elimina uma simulação.
-
-```bash
-curl -X DELETE http://localhost:3001/api/simulations/11111111-1111-4111-8111-111111111111
-```
-
-Resposta `200`:
-
-```json
-{
-  "success": true,
-  "data": {
-    "id": "11111111-1111-4111-8111-111111111111"
-  },
-  "message": "Simulação eliminada com sucesso."
-}
-```
-
-Respostas:
-
-- `200` — simulação eliminada;
-- `400` — `id` não é um UUID válido;
-- `404` — simulação não encontrada.
-
-## Cálculo financeiro
-
-O backend usa capitalização composta com taxa mensal:
-
-```text
-taxaMensal = interestRate / 100 / 12
-finalAmount = initialCapital × (1 + taxaMensal) ^ duration
-profit = finalAmount - initialCapital
-```
-
-`duration` está em meses e `interestRate` é a taxa anual em percentagem. Os
-valores são arredondados a duas casas decimais.
-
-## Códigos de erro
-
-| Código | HTTP | Significado |
-| --- | --- | --- |
-| `VALIDATION_ERROR` | 400 | Corpo ou parâmetros inválidos |
-| `INVALID_JSON` | 400 | JSON malformado |
-| `ASSET_NOT_FOUND` | 404 | Ativo inexistente |
-| `SIMULATION_NOT_FOUND` | 404 | Simulação inexistente |
-| `ROUTE_NOT_FOUND` | 404 | Rota inexistente |
-| `AMOUNT_TOO_LARGE` | 422 | Montante final acima do limite suportado |
-| `CONFLICT` | 409 | Violação de unicidade |
-| `FOREIGN_KEY_VIOLATION` | 409 | Violação de chave estrangeira |
-| `DATABASE_UNAVAILABLE` | 503 | Base de dados indisponível |
-| `INTERNAL_SERVER_ERROR` | 500 | Erro inesperado |
-
-## Como o frontend consome a API
-
-O frontend deve configurar a base URL a partir de uma variável de ambiente:
-
-```env
-VITE_API_BASE_URL=http://localhost:3001/api
-```
-
-Exemplo com `fetch`:
-
-```ts
-const API_URL = import.meta.env.VITE_API_BASE_URL;
-
-export async function getAssets() {
-  const response = await fetch(`${API_URL}/assets`);
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error ?? 'Erro ao obter ativos.');
-  }
-
-  const body = await response.json();
-  return body.data;
-}
-
-export async function createSimulation(input: {
-  assetId: string;
-  initialCapital: number;
-  duration: number;
-  interestRate: number;
-}) {
-  const response = await fetch(`${API_URL}/simulations`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(input),
-  });
-
-  const body = await response.json();
-
-  if (!response.ok) {
-    throw new Error(body.error ?? 'Erro ao criar simulação.');
-  }
-
-  return body.data;
-}
-```
-
-Exemplo com Axios:
-
-```ts
-import axios from 'axios';
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-});
-
-export const getSimulations = () =>
-  api.get('/simulations').then((response) => response.data.data);
-
-export const deleteSimulation = (id: string) =>
-  api.delete(`/simulations/${id}`).then((response) => response.data);
-```
-
-Tipos TypeScript sugeridos para o frontend:
-
-```ts
-export type AssetCategory =
-  | 'STOCKS'
-  | 'BONDS'
-  | 'MUTUAL_FUNDS'
-  | 'REAL_ESTATE'
-  | 'CRYPTO'
-  | 'FIXED_INCOME';
-
-export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
-
-export interface Asset {
-  id: string;
-  name: string;
-  category: AssetCategory;
-  description: string;
-  estimatedAnnualRate: number;
-  riskLevel: RiskLevel;
-  currency: string;
-  createdAt: string;
-}
-
-export interface Simulation {
-  id: string;
-  initialCapital: number;
-  duration: number;
-  interestRate: number;
-  finalAmount: number;
-  profit: number;
-  assetId: string;
-  createdAt: string;
-  asset: {
-    id: string;
-    name: string;
-    category: AssetCategory;
-    riskLevel: RiskLevel;
-    currency: string;
-  };
-}
-```
-
-O CORS é configurado por `CORS_ORIGIN`. Em desenvolvimento, o valor
-`http://localhost:5173` permite o acesso a partir do Vite. Para aceitar
-qualquer origem, usar `*`.
-
-## Base de dados
-
-```bash
-cd backend
-cp .env.example .env    # Linux/macOS
-copy .env.example .env  # Windows
-# preencher DATABASE_URL
-npm run prisma:migrate
-npm run prisma:seed
-```
-
-- `prisma:migrate` aplica as migrations;
-- `prisma:seed` insere ativos e simulações de demonstração;
-- `prisma:migrate:deploy` aplica migrations em produção.
-
-> **Aviso:** os ativos, taxas e simulações são fictícios. O InvestSmart é um
-> projeto académico e não constitui aconselhamento financeiro.
+Ativos e simulações do seed são fictícios e destinam-se apenas a demonstração académica.
