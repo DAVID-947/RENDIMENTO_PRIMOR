@@ -98,22 +98,28 @@ Para ligar ao backend:
 2. mapear `AssetDTO` / `AssetDetailDTO` para `Asset`;
 3. alterar `USE_MOCK_DATA` para `false`.
 
-### Mapeamento futuro com o backend
+### Mapeamento com o backend atual
 
-| Módulo de activos | Prisma / shared     |
-| ----------------- | ------------------- |
-| `ACOES`           | `STOCKS`            |
-| `TITULOS`         | `BONDS`             |
-| `FUNDOS`          | `MUTUAL_FUNDS`      |
-| `IMOBILIARIO`     | `REAL_ESTATE`       |
-| `CRIPTOMOEDAS`    | `CRYPTO`            |
-| `RENDA_FIXA`      | `FIXED_INCOME`      |
-| `LOW`             | `BAIXO`             |
-| `MEDIUM`          | `MEDIO`             |
-| `HIGH`            | `ALTO`              |
-| `estimatedAnnualRate` | `simulatedAnnualReturn` |
-| `minimumInvestment`   | a definir no backend |
-| `risk`                | `riskLevel`           |
+| Módulo de activos | API / Prisma |
+| ----------------- | ------------ |
+| `ACOES`           | `STOCKS` |
+| `TITULOS`         | `BONDS` |
+| `FUNDOS`          | `MUTUAL_FUNDS` |
+| `IMOBILIARIO`     | `REAL_ESTATE` |
+| `CRIPTOMOEDAS`    | `CRYPTO` |
+| `RENDA_FIXA`      | `FIXED_INCOME` |
+| `LOW`             | `LOW` |
+| `MEDIUM`          | `MEDIUM` |
+| `HIGH`            | `HIGH` |
+| `estimatedAnnualRate` | `estimatedAnnualRate` |
+| `risk`                | `riskLevel` |
+| `currency`            | `currency` |
+| `ticker`, `issuer`, `minimumInvestment`, `liquidity`, `horizon` | não existem no backend atual |
+
+O backend devolve `id`, `name`, `category`, `description`,
+`estimatedAnnualRate`, `riskLevel`, `currency` e `createdAt`. Os campos que
+não existem na API devem ser tratados como opcionais no mapeamento do
+frontend. O contrato completo está em `docs/api.md`.
 
 O mapeamento deve ficar no serviço, para que as páginas e componentes não
 dependam do formato do backend.

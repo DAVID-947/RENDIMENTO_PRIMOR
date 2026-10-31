@@ -1,11 +1,12 @@
 // ============================================================================
 // Singleton do PrismaClient — InvestSmart
-// Garante uma única instância de ligação à base de dados em toda a aplicação.
 // ============================================================================
 
 import { PrismaClient } from '@prisma/client';
+import { env } from './config/env';
 
-/** Instância singleton do PrismaClient partilhada por toda a aplicação */
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
+});
 
 export default prisma;

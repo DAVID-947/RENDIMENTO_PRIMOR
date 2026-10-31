@@ -1,27 +1,37 @@
 // ============================================================================
 // Ponto de entrada do servidor — InvestSmart
-// Inicializa variáveis de ambiente e arranca o servidor Express.
 // ============================================================================
 
-import dotenv from 'dotenv';
-
-// Carregar variáveis de ambiente do ficheiro .env
-dotenv.config();
-
+import { env } from './config/env';
 import app from './app';
+import prisma from './prisma';
 
-/** Porta do servidor (padrão: 3001) */
-const PORT = process.env.PORT || 3001;
-
-// Iniciar o servidor
-app.listen(PORT, () => {
+const server = app.listen(env.PORT, () => {
   console.log('============================================================');
-  console.log(`🚀 Servidor InvestSmart a correr na porta ${PORT}`);
-  console.log(`   URL: http://localhost:${PORT}/api/v1`);
+  console.log(`🚀 InvestSmart API a correr em http://localhost:${env.PORT}/api`);
+  console.log(`   Ambiente: ${env.NODE_ENV}`);
   console.log('------------------------------------------------------------');
-  console.log('⚠️  AVISO ACADÉMICO:');
-  console.log('   Esta é uma plataforma de simulação para fins educativos.');
-  console.log('   Todos os valores são meramente estimativos e fictícios.');
+  console.log('⚠️  Projeto académico: todos os valores são estimativas.');
   console.log('   Não constitui aconselhamento financeiro.');
   console.log('============================================================');
 });
+
+/**
+ * Encerra o servidor e a ligação à base de dados de forma controlada.
+ */
+function shutdown(signal: string): void {
+  console.log(`\n${signal} recebido. A encerrar o servidor...`);
+
+  server.close(() => {
+    prisma
+      .$disconnect()
+      .catch((error) => console.error('Erro ao desligar o Prisma:', error))
+      .finally(() => process.exit(0));
+  });
+
+  // Garantir que o processo não fica bloqueado indefinidamente.
+  setTimeout(() => process.exit(1), 10_000).unref();
+}
+
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));

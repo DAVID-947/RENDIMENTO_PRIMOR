@@ -1,63 +1,40 @@
 // ============================================================================
 // Configuração da aplicação Express — InvestSmart
-// Ponto central de configuração de middlewares e rotas da API.
 // ============================================================================
 
-import express from 'express';
 import cors from 'cors';
-
-// Middlewares globais
-import { disclaimerMiddleware } from './middlewares/disclaimer.middleware';
+import express from 'express';
+import { env } from './config/env';
 import { errorHandlerMiddleware } from './middlewares/error-handler.middleware';
+import { notFoundMiddleware } from './middlewares/not-found.middleware';
+import routes from './routes';
 
-// Routers dos módulos
-import assetsRouter from './routes/assets.routes';
-import simulationRouter from './routes/simulation.routes';
-import comparisonRouter from './routes/comparison.routes';
-import dashboardRouter from './routes/dashboard.routes';
-
-/** Instância da aplicação Express */
 const app = express();
 
-// ---------------------------------------------------------------------------
-// Middlewares globais
-// ---------------------------------------------------------------------------
+app.disable('x-powered-by');
 
-// Permitir pedidos cross-origin (desenvolvimento)
-app.use(cors());
+// CORS: aceita uma origem, várias origens separadas por vírgulas, ou *.
+const corsOrigin =
+  env.CORS_ORIGIN === '*'
+    ? '*'
+    : env.CORS_ORIGIN.split(',').map((origin) => origin.trim());
 
-// Interpretar corpos de pedidos em JSON
-app.use(express.json());
+app.use(
+  cors({
+    origin: corsOrigin,
+  }),
+);
 
-// Adicionar cabeçalho de disclaimer académico a todas as respostas
-app.use(disclaimerMiddleware);
+// Limite defensivo para corpos JSON.
+app.use(express.json({ limit: '100kb' }));
 
-// ---------------------------------------------------------------------------
-// Montagem das rotas da API (v1)
-// ---------------------------------------------------------------------------
+// Rotas da API.
+app.use('/api', routes);
 
-app.use('/api/v1/assets', assetsRouter);
-app.use('/api/v1/simulations', simulationRouter);
-app.use('/api/v1/comparisons', comparisonRouter);
-app.use('/api/v1/dashboard', dashboardRouter);
+// 404 para rotas desconhecidas.
+app.use(notFoundMiddleware);
 
-// ---------------------------------------------------------------------------
-// Rota de verificação de saúde
-// ---------------------------------------------------------------------------
-
-app.get('/api/v1/health', (_req, res) => {
-  res.json({
-    status: 'ok',
-    service: 'InvestSmart API',
-    version: '1.0.0',
-    disclaimer: 'Plataforma de simulação académica. Valores meramente estimativos.',
-  });
-});
-
-// ---------------------------------------------------------------------------
-// Middleware de tratamento de erros (deve ser o último)
-// ---------------------------------------------------------------------------
-
+// Tratamento global de erros (deve ser o último middleware).
 app.use(errorHandlerMiddleware);
 
 export default app;

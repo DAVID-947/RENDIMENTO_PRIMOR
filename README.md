@@ -1,112 +1,153 @@
 # InvestSmart
 
-Plataforma académica de simulação, análise e comparação de investimentos
-financeiros.
+Plataforma académica de simulação e comparação de investimentos financeiros.
 
-> **Aviso:** todos os activos, taxas e valores apresentados são fictícios. O
-> InvestSmart é um projecto académico e não constitui aconselhamento
+> **Aviso:** todos os ativos, taxas e valores apresentados são fictícios. O
+> InvestSmart é um projeto académico e não constitui aconselhamento
 > financeiro.
 
 ## Tecnologias
 
 - **Frontend:** React 18, TypeScript, Vite e CSS
-- **Backend:** Node.js, Express, TypeScript e Prisma
+- **Backend:** Node.js, Express, TypeScript, Prisma ORM
 - **Base de dados:** PostgreSQL
 
 ## Estrutura do repositório
 
 ```text
 investsmart/
+├── backend/
+│   ├── prisma/
+│   │   ├── migrations/
+│   │   ├── schema.prisma
+│   │   └── seed.ts
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middlewares/
+│   │   ├── routes/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── types/
+│   │   ├── utils/
+│   │   ├── app.ts
+│   │   ├── prisma.ts
+│   │   └── server.ts
+│   └── package.json
+│
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
 │   │   ├── pages/
-│   │   │   ├── Dashboard/
-│   │   │   ├── Assets/
-│   │   │   ├── Simulator/
-│   │   │   ├── Comparison/
-│   │   │   └── History/
 │   │   ├── services/
 │   │   ├── types/
-│   │   ├── utils/
-│   │   └── App.tsx
+│   │   └── utils/
 │   └── package.json
 │
-├── backend/
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   └── server.ts
-│   └── prisma/
-│       └── schema.prisma
-│
 ├── docs/
+│   ├── api.md
 │   └── assets-module.md
 │
-├── README.md
-└── .gitignore
+├── .env.example
+└── README.md
 ```
 
-Além destes directórios, cada aplicação mantém os ficheiros de infraestrutura
-necessários ao seu funcionamento:
+## Arquitetura do backend
 
-- `frontend/src/main.tsx`, `frontend/src/styles/`, `index.html`,
-  `vite.config.ts` e `tsconfig.json`;
-- `backend/src/app.ts`, `backend/src/prisma.ts`, `backend/src/middlewares/`,
-  `backend/src/utils/` e os ficheiros de configuração do TypeScript.
+O backend segue uma separação em camadas:
 
-## Módulos do frontend
+```text
+routes → controllers → services → Prisma ORM → PostgreSQL
+```
 
-| Módulo | Estado | Localização |
+- `routes/` — define os endpoints e aplica validação;
+- `controllers/` — interpreta o pedido e devolve a resposta HTTP;
+- `services/` — regras de negócio, cálculos e acesso ao Prisma;
+- `middlewares/` — validação com Zod, 404 e tratamento global de erros;
+- `schemas/` — contratos de entrada;
+- `utils/` — erros, respostas e wrapper assíncrono.
+
+## API
+
+Base URL: `http://localhost:3001/api`
+
+| Método | Rota | Descrição |
 | --- | --- | --- |
-| Dashboard | Implementado | `frontend/src/pages/Dashboard` |
-| Activos | Implementado | `frontend/src/pages/Assets` |
-| Simulador | Placeholder | `frontend/src/pages/Simulator` |
-| Comparador | Placeholder | `frontend/src/pages/Comparison` |
-| Histórico | Placeholder | `frontend/src/pages/History` |
+| GET | `/api/assets` | Lista todos os ativos |
+| GET | `/api/assets/:id` | Detalhe de um ativo |
+| GET | `/api/simulations` | Histórico de simulações |
+| GET | `/api/simulations/:id` | Detalhe de uma simulação |
+| POST | `/api/simulations` | Cria e guarda uma simulação |
+| DELETE | `/api/simulations/:id` | Elimina uma simulação |
+| GET | `/api/health` | Verificação de saúde |
 
-### Módulo de activos
+A documentação completa, incluindo exemplos de pedidos, respostas, erros e
+integração com o frontend, está em [`docs/api.md`](docs/api.md).
 
-- Listagem com pesquisa e filtros por categoria.
-- Seis categorias: Ações, Títulos, Fundos de investimento, Imobiliário,
-  Criptomoedas e Renda fixa.
-- Cartões com nome, categoria, taxa anual estimada e nível de risco.
-- Página de detalhe com descrição e informação adicional.
-- Selecção de um activo para o simulador, persistida em `localStorage`.
+### Modelo de dados
 
-Ver `docs/assets-module.md` para o contrato de integração.
+- **Asset:** `id`, `name`, `category`, `description`, `estimatedAnnualRate`,
+  `riskLevel`, `currency`, `createdAt`.
+- **Simulation:** `id`, `initialCapital`, `duration`, `interestRate`,
+  `finalAmount`, `profit`, `assetId`, `createdAt`.
 
-## API do backend
+`duration` está em meses. `finalAmount` e `profit` são calculados pelo
+backend com capitalização composta mensal e nunca aceites diretamente do
+cliente.
 
-| Recurso | Rota |
-| --- | --- |
-| Ativos | `/api/v1/assets` |
-| Simulações | `/api/v1/simulations` |
-| Comparações | `/api/v1/comparisons` |
-| Dashboard | `/api/v1/dashboard/summary` |
-| Saúde | `/api/v1/health` |
-
-A organização segue três camadas:
-
-- `backend/src/routes/` — definição dos endpoints;
-- `backend/src/controllers/` — validação dos pedidos e respostas HTTP;
-- `backend/src/services/` — regras de negócio e acesso a dados.
+Relação: `Asset 1 ─── N Simulation`, com `ON DELETE RESTRICT` para preservar
+o histórico.
 
 ## Instalação
 
-Instalar as dependências de cada aplicação:
+### Backend
 
 ```bash
-cd frontend && npm install
-cd ../backend && npm install
+cd backend
+npm install
 ```
 
-Copiar `.env.example` para `.env` e configurar a base de dados PostgreSQL.
+Copiar o ficheiro de ambiente e preencher a ligação ao PostgreSQL:
+
+```bash
+copy .env.example .env
+```
+
+```env
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/investsmart?schema=public"
+PORT=3001
+NODE_ENV=development
+CORS_ORIGIN=http://localhost:5173
+```
+
+Nunca colocar credenciais diretamente no código. O ficheiro `.env` está
+ignorado pelo Git.
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+```
+
+## Base de dados
+
+Com o PostgreSQL a correr e o `DATABASE_URL` configurado:
+
+```bash
+cd backend
+npm run prisma:generate
+npm run prisma:migrate
+npm run prisma:seed
+```
+
+- `prisma:migrate` aplica as migrations;
+- `prisma:seed` insere ativos fictícios e três simulações de demonstração;
+- `prisma:migrate:deploy` aplica migrations em ambientes de produção.
 
 ## Execução
 
-Na raiz do projecto:
+Na raiz do projeto:
 
 ```bash
 npm run dev:backend
@@ -114,19 +155,9 @@ npm run dev:frontend
 ```
 
 - Frontend: `http://localhost:5173`
-- API: `http://localhost:3001/api/v1`
+- API: `http://localhost:3001/api`
 
 Os scripts `dev:server` e `dev:client` continuam disponíveis como alias.
-
-## Base de dados
-
-```bash
-npm run prisma:generate
-npm run prisma:migrate
-npm run prisma:seed
-```
-
-O seed insere activos fictícios para demonstração.
 
 ## Build
 
@@ -135,13 +166,41 @@ npm run build:backend
 npm run build:frontend
 ```
 
-## Dados de demonstração
+## Frontend
 
-O módulo de activos usa inicialmente
-`frontend/src/pages/Assets/data/assets.mock.ts`. Todos os registos estão
-marcados com `isMockData: true` e a interface mostra o aviso
-"Dados de demonstração".
+O frontend mantém os módulos de Dashboard, Ativos, Simulador, Comparador e
+Histórico. O catálogo de ativos ainda usa dados de demonstração locais; a
+integração com esta API deve seguir os exemplos de `docs/api.md`.
 
-Quando o backend estiver disponível, basta substituir a implementação de
-`frontend/src/pages/Assets/services/assets.service.ts`, mantendo os
-componentes intactos.
+| Módulo | Estado | Localização |
+| --- | --- | --- |
+| Dashboard | Implementado | `frontend/src/pages/Dashboard` |
+| Ativos | Implementado com dados mock | `frontend/src/pages/Assets` |
+| Simulador | Placeholder | `frontend/src/pages/Simulator` |
+| Comparador | Placeholder | `frontend/src/pages/Comparison` |
+| Histórico | Placeholder | `frontend/src/pages/History` |
+
+## Scripts úteis
+
+Na raiz:
+
+```bash
+npm run prisma:generate
+npm run prisma:migrate
+npm run prisma:seed
+npm run setup
+```
+
+No backend:
+
+```bash
+npm run dev
+npm run build
+npm run start
+npm run typecheck
+npm run prisma:migrate:deploy
+```
+
+## Licença
+
+MIT. Projeto académico sem fins comerciais.

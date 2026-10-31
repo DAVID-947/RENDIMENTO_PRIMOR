@@ -1,7 +1,6 @@
 // ============================================================================
 // Schema Prisma — InvestSmart
-// Definição do modelo de dados para o simulador académico de investimentos.
-// Todos os valores são fictícios e meramente estimativos.
+// Modelo de dados da plataforma académica de simulação de investimentos.
 // ============================================================================
 
 generator client {
@@ -17,7 +16,7 @@ datasource db {
 // Enumerações
 // ----------------------------------------------------------------------------
 
-/// Categorias de ativos disponíveis na plataforma
+/// Categorias de ativos disponíveis no catálogo.
 enum AssetCategory {
   STOCKS
   BONDS
@@ -27,67 +26,55 @@ enum AssetCategory {
   FIXED_INCOME
 }
 
-/// Tipo de juro utilizado na simulação
-enum InterestType {
-  SIMPLE
-  COMPOUND
+/// Nível de risco associado a um ativo.
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
 }
 
 // ----------------------------------------------------------------------------
 // Modelos
 // ----------------------------------------------------------------------------
 
-/// Representa um ativo financeiro simulado na plataforma
+/// Ativo financeiro fictício apresentado no catálogo.
 model Asset {
-  id                     String        @id @default(uuid())
-  ticker                 String        @unique
-  name                   String
-  category               AssetCategory
-  description            String?
-  simulatedPrice         Decimal       @db.Decimal(12, 2)
-  simulatedAnnualReturn  Decimal       @db.Decimal(5, 2)
-  riskLevel              String
-  isMockData             Boolean       @default(true)
-  createdAt              DateTime      @default(now())
-  updatedAt              DateTime      @updatedAt
+  id                  String        @id @default(uuid()) @db.Uuid
+  name                String        @unique
+  category            AssetCategory
+  description         String        @db.Text
+  estimatedAnnualRate Decimal       @db.Decimal(6, 2)
+  riskLevel           RiskLevel
+  currency            String        @default("AOA") @db.VarChar(3)
+  createdAt           DateTime      @default(now())
 
-  /// Relação com as simulações que incluem este ativo
-  simulations SimulationAsset[]
+  /// Simulações realizadas com este ativo.
+  simulations Simulation[]
 
+  @@index([category])
+  @@index([riskLevel])
   @@map("assets")
 }
 
-/// Representa uma simulação de investimento criada pelo utilizador
+/// Simulação de investimento guardada pelo utilizador.
 model Simulation {
-  id                    String       @id @default(uuid())
-  title                 String?
-  initialAmount         Decimal      @db.Decimal(12, 2)
-  monthlyContribution   Decimal      @default(0) @db.Decimal(12, 2)
-  annualRate            Decimal      @db.Decimal(5, 2)
-  periodMonths          Int
-  interestType          InterestType
-  finalEstimatedTotal   Decimal      @db.Decimal(14, 2)
-  totalInterestEarned   Decimal      @db.Decimal(14, 2)
-  isAcademicEstimate    Boolean      @default(true)
-  createdAt             DateTime     @default(now())
+  id             String   @id @default(uuid()) @db.Uuid
+  initialCapital Decimal  @db.Decimal(14, 2)
+  /// Duração da simulação em meses.
+  duration       Int
+  /// Taxa de juro anual em percentagem (ex.: 9.50 para 9,5%).
+  interestRate   Decimal  @db.Decimal(6, 2)
+  /// Montante final calculado pelo backend.
+  finalAmount    Decimal  @db.Decimal(16, 2)
+  /// Lucro calculado pelo backend (finalAmount - initialCapital).
+  profit         Decimal  @db.Decimal(16, 2)
+  assetId        String   @db.Uuid
+  createdAt      DateTime @default(now())
 
-  /// Ativos associados a esta simulação
-  assets SimulationAsset[]
+  /// Ativo associado à simulação.
+  asset Asset @relation(fields: [assetId], references: [id], onDelete: Restrict)
 
+  @@index([assetId])
+  @@index([createdAt])
   @@map("simulations")
-}
-
-/// Tabela de junção entre simulações e ativos, com percentagem de alocação
-model SimulationAsset {
-  simulationId String
-  assetId      String
-  allocation   Decimal @db.Decimal(5, 2)
-
-  /// Referência à simulação
-  simulation Simulation @relation(fields: [simulationId], references: [id], onDelete: Cascade)
-  /// Referência ao ativo
-  asset      Asset      @relation(fields: [assetId], references: [id], onDelete: Cascade)
-
-  @@id([simulationId, assetId])
-  @@map("simulation_assets")
 }

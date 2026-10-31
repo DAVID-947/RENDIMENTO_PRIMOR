@@ -1,18 +1,18 @@
 // ============================================================================
 // Rotas de Ativos — InvestSmart
-// Definição dos endpoints da API para consulta de ativos financeiros.
 // ============================================================================
 
 import { Router } from 'express';
-import { listAssets, getAssetDetail } from '../controllers/assets.controller';
+import { getAsset, listAssets } from '../controllers/assets.controller';
+import { idParamSchema } from '../schemas/simulation.schema';
+import { validateParams } from '../middlewares/validate.middleware';
 
-/** Router Express para o módulo de ativos */
 const assetsRouter = Router();
 
-// GET /api/v1/assets — Listar ativos com filtros e paginação
+// GET /api/assets
 assetsRouter.get('/', listAssets);
 
-// GET /api/v1/assets/:id — Obter detalhe de um ativo específico
-assetsRouter.get('/:id', getAssetDetail);
+// GET /api/assets/:id
+assetsRouter.get('/:id', validateParams(idParamSchema), getAsset);
 
 export default assetsRouter;

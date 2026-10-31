@@ -1,96 +1,56 @@
 // ============================================================================
 // Serviço de Ativos — InvestSmart
-// Lógica de negócio para consulta de ativos financeiros simulados.
 // ============================================================================
 
-import { Asset, AssetCategory } from '@prisma/client';
-import { AssetsRepository } from './assets.repository';
+import { Asset } from '@prisma/client';
+import prisma from '../prisma';
+import { AssetResponse } from '../types/asset.types';
+import { AppError } from '../utils/app-error';
 
 /**
- * Parâmetros de filtragem para a listagem de ativos.
+ * Converte um registo Prisma num DTO com valores numéricos.
  */
-export interface AssetFilterParams {
-  /** Filtrar por categoria */
-  category?: AssetCategory;
-  /** Texto de pesquisa (nome ou ticker) */
-  search?: string;
-  /** Filtrar por nível de risco */
-  riskLevel?: string;
-  /** Página atual */
-  page: number;
-  /** Itens por página */
-  limit: number;
-  /** Itens a saltar */
-  skip: number;
+function serializeAsset(asset: Asset): AssetResponse {
+  return {
+    id: asset.id,
+    name: asset.name,
+    category: asset.category,
+    description: asset.description,
+    estimatedAnnualRate: Number(asset.estimatedAnnualRate),
+    riskLevel: asset.riskLevel,
+    currency: asset.currency,
+    createdAt: asset.createdAt.toISOString(),
+  };
 }
 
 /**
- * Resultado paginado de ativos.
+ * Lista todos os ativos por ordem alfabética.
  */
-export interface PaginatedAssetsResult {
-  data: Asset[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
+export async function listAssets(): Promise<AssetResponse[]> {
+  const assets = await prisma.asset.findMany({
+    orderBy: { name: 'asc' },
+  });
+
+  return assets.map(serializeAsset);
 }
 
 /**
- * Serviço responsável pela lógica de negócio relacionada com ativos.
+ * Obtém um ativo pelo seu identificador.
+ *
+ * @throws AppError 404 quando o ativo não existe.
  */
-export class AssetsService {
-  /** Repositório de ativos injetado via construtor */
-  private repository: AssetsRepository;
+export async function getAssetById(id: string): Promise<AssetResponse> {
+  const asset = await prisma.asset.findUnique({
+    where: { id },
+  });
 
-  constructor(repository: AssetsRepository) {
-    this.repository = repository;
+  if (!asset) {
+    throw new AppError(
+      404,
+      'ASSET_NOT_FOUND',
+      `Ativo com id '${id}' não encontrado.`,
+    );
   }
 
-  /**
-   * Obtém todos os ativos com filtros e paginação.
-   *
-   * @param filters - Parâmetros de filtragem e paginação
-   * @returns Resultado paginado com ativos e metadados
-   */
-  async getAllAssets(filters: AssetFilterParams): Promise<PaginatedAssetsResult> {
-    const { category, search, riskLevel, skip, limit, page } = filters;
-
-    const { assets, total } = await this.repository.findAll({
-      category,
-      search,
-      riskLevel,
-      skip,
-      take: limit,
-    });
-
-    const totalPages = Math.ceil(total / limit) || 1;
-
-    return {
-      data: assets,
-      total,
-      page,
-      limit,
-      totalPages,
-    };
-  }
-
-  /**
-   * Obtém o detalhe de um ativo pelo seu identificador.
-   * Lança um erro 404 caso o ativo não exista.
-   *
-   * @param id - Identificador único (UUID) do ativo
-   * @returns O ativo encontrado
-   * @throws Erro com statusCode 404 se o ativo não for encontrado
-   */
-  async getAssetById(id: string): Promise<Asset> {
-    const asset = await this.repository.findById(id);
-
-    if (!asset) {
-      const error: any = new Error(`Ativo com ID '${id}' não encontrado.`);
-      error.statusCode = 404;
-      throw error;
-    }
-
-    return asset;
-  }
+  return serializeAsset(asset);
 }

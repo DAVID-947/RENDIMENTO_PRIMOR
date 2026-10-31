@@ -1,70 +1,27 @@
 // ============================================================================
 // Controlador de Ativos — InvestSmart
-// Handlers Express para os endpoints de consulta de ativos financeiros.
 // ============================================================================
 
-import { Request, Response, NextFunction } from 'express';
-import { AssetCategory } from '@prisma/client';
-import prisma from '../prisma';
-import { AssetsRepository } from '../services/assets.repository';
-import { AssetsService } from '../services/assets.service';
-import { parsePaginationParams } from '../utils/pagination.util';
-import { successResponse } from '../utils/api-response.util';
+import { Request, Response } from 'express';
+import {
+  getAssetById,
+  listAssets as listAssetsService,
+} from '../services/assets.service';
+import { successResponse } from '../utils/api-response';
+import { asyncHandler } from '../utils/async-handler';
 
-// Instanciar repositório e serviço ao nível do módulo (singleton)
-const repository = new AssetsRepository(prisma);
-const service = new AssetsService(repository);
+/** GET /api/assets */
+export const listAssets = asyncHandler(
+  async (_req: Request, res: Response): Promise<void> => {
+    const assets = await listAssetsService();
+    res.status(200).json(successResponse(assets));
+  },
+);
 
-/**
- * Lista todos os ativos com filtros opcionais e paginação.
- * Query params: page, limit, category, search, riskLevel
- */
-export async function listAssets(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  try {
-    // Interpretar parâmetros de paginação
-    const { page, limit, skip } = parsePaginationParams(req.query);
-
-    // Interpretar filtros opcionais
-    const category = req.query.category as AssetCategory | undefined;
-    const search = req.query.search as string | undefined;
-    const riskLevel = req.query.riskLevel as string | undefined;
-
-    // Obter ativos paginados
-    const result = await service.getAllAssets({
-      category,
-      search,
-      riskLevel,
-      page,
-      limit,
-      skip,
-    });
-
-    res.json(successResponse(result, 'Ativos obtidos com sucesso.'));
-  } catch (error) {
-    next(error);
-  }
-}
-
-/**
- * Obtém o detalhe de um ativo específico pelo seu ID.
- * Params: id (UUID)
- */
-export async function getAssetDetail(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  try {
-    const { id } = req.params;
-
-    const asset = await service.getAssetById(id);
-
-    res.json(successResponse(asset, 'Detalhe do ativo obtido com sucesso.'));
-  } catch (error) {
-    next(error);
-  }
-}
+/** GET /api/assets/:id */
+export const getAsset = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const asset = await getAssetById(req.params.id);
+    res.status(200).json(successResponse(asset));
+  },
+);
