@@ -1,7 +1,7 @@
 # Módulo de Activos
 
 Documentação técnica do módulo responsável pela gestão e apresentação dos
-activos financeiros do InvestSmart.
+activos financeiros do Rendimento Primor.
 
 > **Aviso:** todos os activos, taxas, montantes e entidades apresentados são
 > fictícios. O módulo existe apenas para fins académicos e não constitui

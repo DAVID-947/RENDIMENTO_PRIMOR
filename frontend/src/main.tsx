@@ -1,5 +1,5 @@
 /**
- * Ponto de entrada principal da aplicação InvestSmart.
+ * Ponto de entrada principal da aplicação Rendimento Primor.
  * Inicializa o React com StrictMode e BrowserRouter para navegação.
  */
 import { StrictMode } from 'react';

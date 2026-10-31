@@ -1,5 +1,5 @@
 /**
- * Catálogo fictício de activos do InvestSmart.
+ * Catálogo fictício de activos do Rendimento Primor.
  *
  * AVISO: todos os nomes, taxas, valores e entidades são inventados. Este
  * ficheiro existe apenas para demonstrar o módulo de activos e não representa
@@ -126,7 +126,7 @@ export const demoAssets: Asset[] = [
     currency: 'AOA',
     description:
       'Fundo misto fictício com exposição diversificada a ações, obrigações e liquidez. Procura um equilíbrio entre crescimento do capital e proteção face a períodos de maior volatilidade.',
-    issuer: 'InvestSmart Gestão (fictício)',
+    issuer: 'Rendimento Primor Gestão (fictício)',
     minimumInvestment: 20_000,
     liquidity: 'Semanal',
     horizon: 'Médio prazo',
@@ -142,7 +142,7 @@ export const demoAssets: Asset[] = [
     currency: 'AOA',
     description:
       'Fundo setorial fictício centrado em empresas de tecnologia emergente. Tem um potencial de valorização elevado, mas está sujeito a oscilações significativas.',
-    issuer: 'InvestSmart Gestão (fictício)',
+    issuer: 'Rendimento Primor Gestão (fictício)',
     minimumInvestment: 15_000,
     liquidity: 'Semanal',
     horizon: 'Longo prazo',
@@ -158,7 +158,7 @@ export const demoAssets: Asset[] = [
     currency: 'AOA',
     description:
       'Fundo fictício de perfil conservador, investido maioritariamente em instrumentos de renda fixa de curto prazo. Serve para demonstrar uma estratégia de preservação de capital.',
-    issuer: 'InvestSmart Gestão (fictício)',
+    issuer: 'Rendimento Primor Gestão (fictício)',
     minimumInvestment: 10_000,
     liquidity: 'Semanal',
     horizon: 'Curto prazo',

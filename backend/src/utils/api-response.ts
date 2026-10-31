@@ -1,5 +1,5 @@
 // ============================================================================
-// Respostas padronizadas da API — InvestSmart
+// Respostas padronizadas da API — Rendimento Primor
 // ============================================================================
 
 export interface ApiSuccessResponse<T> {

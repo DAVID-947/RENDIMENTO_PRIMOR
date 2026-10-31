@@ -1,5 +1,5 @@
 // ============================================================================
-// Agregador de rotas da API — InvestSmart
+// Agregador de rotas da API — Rendimento Primor
 // ============================================================================
 
 import { Router } from 'express';
@@ -17,7 +17,7 @@ routes.get('/health', asyncHandler(async (_req, res) => {
     success: true,
     data: {
       status: 'ok',
-      service: 'InvestSmart API',
+      service: 'Rendimento Primor API',
       database: 'connected',
       timestamp: new Date().toISOString(),
     },

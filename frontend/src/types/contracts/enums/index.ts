@@ -1,5 +1,5 @@
 /**
- * Re-exportação de todos os enums partilhados do InvestSmart.
+ * Re-exportação de todos os enums partilhados do Rendimento Primor.
  */
 export { AssetCategory } from './asset-category.enum';
 export { InterestType } from './interest-type.enum';

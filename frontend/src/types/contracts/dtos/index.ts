@@ -1,5 +1,5 @@
 /**
- * Re-exportação de todos os DTOs partilhados do InvestSmart.
+ * Re-exportação de todos os DTOs partilhados do Rendimento Primor.
  */
 export type {
   AssetDTO,

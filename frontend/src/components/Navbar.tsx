@@ -1,5 +1,5 @@
 /**
- * Navbar — Barra de navegação principal do InvestSmart.
+ * Navbar — Barra de navegação principal do Rendimento Primor.
  * Inclui logótipo, links de navegação e emblema académico.
  */
 import { NavLink } from 'react-router-dom';
@@ -82,7 +82,7 @@ function Navbar() {
         {/* Logótipo e emblema */}
         <div style={styles.logoSection}>
           <NavLink to="/" style={styles.logo}>
-            📈 InvestSmart
+            📈 Rendimento Primor
           </NavLink>
           <span style={styles.badge}>Simulador Académico</span>
         </div>

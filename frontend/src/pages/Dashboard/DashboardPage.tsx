@@ -1,5 +1,5 @@
 /**
- * DashboardPage — painel de controlo principal do InvestSmart.
+ * DashboardPage — painel de controlo principal do Rendimento Primor.
  * Compõe os indicadores, a evolução da carteira, o resumo por categoria e os
  * investimentos recentes. Todos os dados vêm de `useDashboardOverview`.
  */

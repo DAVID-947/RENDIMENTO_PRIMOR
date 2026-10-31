@@ -30,7 +30,7 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
             <IconTrendUp size={22} />
           </span>
           <span className="sidebar__brand-text">
-            <strong>InvestSmart</strong>
+            <strong>Rendimento Primor</strong>
             <small>Simulador académico</small>
           </span>
         </Link>
@@ -68,7 +68,7 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
             </p>
           </div>
         </div>
-        <p className="sidebar__version">InvestSmart v1.0 · Projeto académico</p>
+        <p className="sidebar__version">Rendimento Primor v1.0 · Projeto académico</p>
       </div>
 
       <button

@@ -1,5 +1,5 @@
 // ============================================================================
-// Wrapper para handlers assíncronos — InvestSmart
+// Wrapper para handlers assíncronos — Rendimento Primor
 // ============================================================================
 
 import { NextFunction, Request, RequestHandler, Response } from 'express';

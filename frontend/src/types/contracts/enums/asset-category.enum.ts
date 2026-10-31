@@ -1,5 +1,5 @@
 /**
- * Categorias de activos financeiros disponíveis no simulador InvestSmart.
+ * Categorias de activos financeiros disponíveis no simulador Rendimento Primor.
  * Todas as categorias representam dados fictícios para fins académicos.
  */
 export enum AssetCategory {

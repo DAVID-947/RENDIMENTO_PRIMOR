@@ -1,7 +1,7 @@
 {
-  "name": "@investsmart/client",
+  "name": "@rendimento-primor/client",
   "version": "1.0.0",
-  "description": "Cliente frontend do InvestSmart — Interface de simulação de investimentos.",
+  "description": "Cliente frontend do Rendimento Primor — Interface de simulação de investimentos.",
   "type": "module",
   "scripts": {
     "dev": "vite",

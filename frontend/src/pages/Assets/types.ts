@@ -1,5 +1,5 @@
 /**
- * Tipos do módulo de activos do InvestSmart.
+ * Tipos do módulo de activos do Rendimento Primor.
  *
  * Este ficheiro define o contrato de dados utilizado pela listagem, pelo
  * detalhe e pela selecção de activos para o simulador. Todos os valores

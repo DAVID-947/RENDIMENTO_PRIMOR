@@ -35,7 +35,7 @@ O backend calcula `finalAmount` e `profit`; estes valores nunca são aceites do 
 
 ## Arranque local da base de dados
 
-Neste workspace, o cluster isolado do projeto está em `.postgres-data/` (ignorado pelo Git) e as credenciais estão em `backend/.env` (também ignorado). `npm run db:start` inicia-o após uma reinicialização; `npm run db:stop` encerra-o. `npm run setup` gera o Prisma Client, aplica migrations e atualiza o seed. `npm run dev:backend` inicia a base local configurada antes da API.
+Neste workspace, o cluster isolado do projeto está em `.postgres-data/` (ignorado pelo Git) e as credenciais estão em `backend/.env` (também ignorado). `npm run db:start` inicia-o após uma reinicialização; `npm run db:stop` encerra-o. `npm run setup` aplica migrations pendentes e atualiza o seed. O Prisma Client é gerado na instalação das dependências; para o regenerar manualmente no Windows, fecha primeiro o backend para libertar a DLL. `npm run dev:backend` inicia a base local configurada antes da API.
 
 Num novo ambiente com Docker Compose, na raiz do projeto:
 

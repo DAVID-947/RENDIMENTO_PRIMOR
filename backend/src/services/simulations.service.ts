@@ -1,5 +1,5 @@
 // ============================================================================
-// Serviço de Simulações — InvestSmart
+// Serviço de Simulações — Rendimento Primor
 // ============================================================================
 
 import { Prisma } from '@prisma/client';

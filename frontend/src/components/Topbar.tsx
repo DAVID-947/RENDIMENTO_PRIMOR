@@ -26,7 +26,7 @@ function Topbar({ title, onMenuClick }: TopbarProps) {
         </button>
 
         <div className="topbar__breadcrumb" aria-label="Localização atual">
-          <span>InvestSmart</span>
+          <span>Rendimento Primor</span>
           <span className="topbar__sep" aria-hidden="true">
             /
           </span>

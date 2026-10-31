@@ -1,5 +1,5 @@
 // ============================================================================
-// Controlador de Simulações — InvestSmart
+// Controlador de Simulações — Rendimento Primor
 // ============================================================================
 
 import { Request, Response } from 'express';

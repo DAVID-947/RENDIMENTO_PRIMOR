@@ -1,4 +1,4 @@
-# API InvestSmart
+# API Rendimento Primor
 
 Base URL local: `http://localhost:3001/api`. As respostas de sucesso usam `{ "success": true, "data": ... }`; os erros incluem `success: false`, `error`, `code`, `statusCode` e, quando aplicável, `details`.
 
@@ -62,7 +62,7 @@ Confirma que o servidor responde e que o PostgreSQL aceita uma consulta. Devolve
 
 ## Base de dados local
 
-Na raiz do repositório, `npm run setup` gera o Prisma Client, aplica migrations e executa o seed. `npm run dev:backend` inicia o cluster local do projeto se estiver configurado e depois arranca a API.
+Na raiz do repositório, `npm run setup` aplica migrations pendentes e executa o seed. Instala as dependências do backend e gera o Prisma Client uma vez com `npm run prisma:generate` antes do primeiro arranque. No Windows, para regenerar o cliente, fecha primeiro o backend para libertar a DLL do Prisma. `npm run dev:backend` inicia o cluster local do projeto se estiver configurado e depois arranca a API.
 
 Para um novo ambiente com Docker Compose:
 

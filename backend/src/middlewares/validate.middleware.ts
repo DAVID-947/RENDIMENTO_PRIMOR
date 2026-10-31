@@ -1,5 +1,5 @@
 // ============================================================================
-// Middleware de validação — InvestSmart
+// Middleware de validação — Rendimento Primor
 // ============================================================================
 
 import { RequestHandler } from 'express';

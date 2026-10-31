@@ -1,5 +1,5 @@
 // ============================================================================
-// Seed da base de dados — InvestSmart
+// Seed da base de dados — Rendimento Primor
 // Insere ativos fictícios e simulações de demonstração.
 // Executar com: npm run prisma:seed
 // ============================================================================

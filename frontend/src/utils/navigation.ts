@@ -70,5 +70,5 @@ export function getPageTitle(pathname: string): string {
       item.to === '/' ? pathname === '/' : pathname.startsWith(item.to),
     );
 
-  return match?.label ?? 'InvestSmart';
+  return match?.label ?? 'Rendimento Primor';
 }

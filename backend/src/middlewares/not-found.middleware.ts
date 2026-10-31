@@ -1,5 +1,5 @@
 // ============================================================================
-// Middleware para rotas não encontradas — InvestSmart
+// Middleware para rotas não encontradas — Rendimento Primor
 // ============================================================================
 
 import { NextFunction, Request, Response } from 'express';

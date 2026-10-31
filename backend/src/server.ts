@@ -1,5 +1,5 @@
 // ============================================================================
-// Ponto de entrada do servidor — InvestSmart
+// Ponto de entrada do servidor — Rendimento Primor
 // ============================================================================
 
 import { env } from './config/env';
@@ -8,7 +8,7 @@ import prisma from './prisma';
 
 const server = app.listen(env.PORT, () => {
   console.log('============================================================');
-  console.log(`🚀 InvestSmart API a correr em http://localhost:${env.PORT}/api`);
+  console.log(`🚀 Rendimento Primor API a correr em http://localhost:${env.PORT}/api`);
   console.log(`   Ambiente: ${env.NODE_ENV}`);
   console.log('------------------------------------------------------------');
   console.log('⚠️  Projeto académico: todos os valores são estimativas.');

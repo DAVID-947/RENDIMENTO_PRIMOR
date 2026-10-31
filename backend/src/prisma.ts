@@ -1,5 +1,5 @@
 // ============================================================================
-// Singleton do PrismaClient — InvestSmart
+// Singleton do PrismaClient — Rendimento Primor
 // ============================================================================
 
 import { PrismaClient } from '@prisma/client';

@@ -25,7 +25,7 @@ function Footer() {
   return (
     <footer style={styles.footer}>
       <p style={styles.text}>
-        ⚠️ InvestSmart é uma plataforma de simulação académica. Não constitui
+        ⚠️ Rendimento Primor é uma plataforma de simulação académica. Não constitui
         recomendação de investimento. Todos os dados são fictícios e os
         resultados são meramente estimativos.
       </p>

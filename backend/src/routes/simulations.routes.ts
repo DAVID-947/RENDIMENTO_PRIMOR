@@ -1,5 +1,5 @@
 // ============================================================================
-// Rotas de Simulações — InvestSmart
+// Rotas de Simulações — Rendimento Primor
 // ============================================================================
 
 import { Router } from 'express';

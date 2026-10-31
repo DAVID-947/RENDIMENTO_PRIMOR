@@ -1,5 +1,5 @@
 // ============================================================================
-// Middleware global de tratamento de erros — InvestSmart
+// Middleware global de tratamento de erros — Rendimento Primor
 // ============================================================================
 
 import { Prisma } from '@prisma/client';

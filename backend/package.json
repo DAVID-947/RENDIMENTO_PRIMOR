@@ -1,7 +1,7 @@
 {
-  "name": "@investsmart/server",
+  "name": "@rendimento-primor/server",
   "version": "1.0.0",
-  "description": "Servidor backend do InvestSmart — API RESTful para simulação de investimentos.",
+  "description": "Servidor backend do Rendimento Primor — API RESTful para simulação de investimentos.",
   "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",

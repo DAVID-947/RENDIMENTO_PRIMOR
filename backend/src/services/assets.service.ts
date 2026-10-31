@@ -1,5 +1,5 @@
 // ============================================================================
-// Serviço de Ativos — InvestSmart
+// Serviço de Ativos — Rendimento Primor
 // ============================================================================
 
 import { Asset } from '@prisma/client';

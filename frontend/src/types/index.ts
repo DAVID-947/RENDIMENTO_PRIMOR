@@ -1,5 +1,5 @@
 /**
- * Tipos e interfaces partilhados do InvestSmart.
+ * Tipos e interfaces partilhados do Rendimento Primor.
  * Cópia local para que o cliente funcione de forma independente.
  */
 

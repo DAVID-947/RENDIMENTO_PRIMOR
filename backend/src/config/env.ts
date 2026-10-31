@@ -1,5 +1,5 @@
 // ============================================================================
-// Configuração e validação das variáveis de ambiente — InvestSmart
+// Configuração e validação das variáveis de ambiente — Rendimento Primor
 // ============================================================================
 
 import dotenv from 'dotenv';

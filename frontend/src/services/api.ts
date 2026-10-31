@@ -1,5 +1,5 @@
 /**
- * Serviço API — Comunicação com o backend InvestSmart.
+ * Serviço API — Comunicação com o backend Rendimento Primor.
  * Utiliza Axios para todas as chamadas HTTP.
  */
 import axios from 'axios';

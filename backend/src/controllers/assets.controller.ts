@@ -1,5 +1,5 @@
 // ============================================================================
-// Controlador de Ativos — InvestSmart
+// Controlador de Ativos — Rendimento Primor
 // ============================================================================
 
 import { Request, Response } from 'express';

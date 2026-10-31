@@ -1,5 +1,5 @@
 /**
- * Componente principal da aplicação InvestSmart.
+ * Componente principal da aplicação Rendimento Primor.
  * Define todas as rotas e envolve a aplicação com o Layout.
  */
 import { Routes, Route } from 'react-router-dom';

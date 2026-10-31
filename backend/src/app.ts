@@ -1,5 +1,5 @@
 // ============================================================================
-// Configuração da aplicação Express — InvestSmart
+// Configuração da aplicação Express — Rendimento Primor
 // ============================================================================
 
 import cors from 'cors';
